@@ -8,14 +8,14 @@ import (
 
 type generatorStub struct{}
 
-func (g generatorStub) Code() (string, error) {
+func (g generatorStub) ID() (string, error) {
 	return "shorty", nil
 }
 
 type storageStub map[string]shortener.URL
 
 func (s storageStub) Put(shortenerURL shortener.URL) error {
-	s[shortenerURL.Shortened] = shortenerURL
+	s[shortenerURL.ID] = shortenerURL
 
 	return nil
 }

@@ -8,20 +8,20 @@ type Service struct {
 
 // Shorten takes a url string and returns a short code
 func (s Service) Shorten(originalURL string) (string, error) {
-	shortened, err := s.Generator.Code()
+	id, err := s.Generator.ID()
 	if err != nil {
 		return "", nil
 	}
 
-	url := URL{originalURL, shortened}
+	url := URL{originalURL, id}
 
-	return url.Shortened, s.Storage.Put(url)
+	return url.ID, s.Storage.Put(url)
 
 }
 
 // Unshorten takes short code and returns a url
-func (s Service) Unshorten(code string) (string, error) {
-	url, err := s.Storage.Get(code)
+func (s Service) Unshorten(id string) (string, error) {
+	url, err := s.Storage.Get(id)
 	if err != nil {
 		return "", err
 	}

@@ -8,5 +8,5 @@ type Storage interface {
 
 // Generator is a dependency to our shortener service
 type Generator interface {
-	Code() (string, error)
+	ID() (string, error)
 }
