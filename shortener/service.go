@@ -6,20 +6,26 @@ type Service struct {
 	Generator Generator
 }
 
-// URL takes a url and returns a short code
-func (s Service) Shorten(originalUrl string) (string, error) {
+// Shorten takes a url string and returns a short code
+func (s Service) Shorten(originalURL string) (string, error) {
 	shortened, err := s.Generator.Code()
 	if err != nil {
 		return "", nil
 	}
 
-	url := URL{originalUrl, shortened}
+	url := URL{originalURL, shortened}
 
 	return url.Shortened, s.Storage.Put(url)
 
 }
 
+// Unshorten takes short code and returns a url
 func (s Service) Unshorten(code string) (string, error) {
+	url, err := s.Storage.Get(code)
+	if err != nil {
+		return "", err
+	}
 
-	return "", nil
+	return url.Original, nil
+
 }

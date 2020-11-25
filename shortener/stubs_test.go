@@ -1,6 +1,10 @@
 package shortener_test
 
-import "github.com/pjonathas/url-shortener/shortener"
+import (
+	"errors"
+
+	"github.com/pjonathas/url-shortener/shortener"
+)
 
 type generatorStub struct{}
 
@@ -10,12 +14,19 @@ func (g generatorStub) Code() (string, error) {
 
 type storageStub map[string]shortener.URL
 
-func (s storageStub) Put(shortener.URL) error {
+func (s storageStub) Put(shortenerURL shortener.URL) error {
+	s[shortenerURL.Shortened] = shortenerURL
 
 	return nil
 }
 
 func (s storageStub) Get(code string) (shortener.URL, error) {
 
-	return shortener.URL{}, nil
+	shortenerURL, ok := s[code]
+
+	if !ok {
+		return shortener.URL{}, errors.New("url not found")
+	}
+
+	return shortenerURL, nil
 }
